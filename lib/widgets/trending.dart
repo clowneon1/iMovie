@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:imovie/description.dart';
 import 'package:imovie/util/text.dart';
 
 class TrendingMovies extends StatelessWidget {
@@ -25,7 +27,17 @@ class TrendingMovies extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemBuilder: ((context, index) {
               return InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: ((context) =>
+                      Description(name: trending[index]["title"] != null ? trending[index]["title"] : "Not Loading", 
+                      description: trending[index]["overview"] != null ? trending[index]["overview"] : "Not Loading", 
+                      bannerUrl: trending[index]["backdrop_path"] != null ? trending[index]["backdrop_path"] : "default", 
+                      posterUrl: trending[index]["poster_path"] != null ? trending[index]["poster_path"] : "default", 
+                      vote: trending[index]["vote_average"] != null ? trending[index]["vote_average"] : 0.0, 
+                      launchOn: trending[index]["release_date"] != null ? trending[index]["release_date"] : "N/A")
+                    )));
+                },
                 child: Container(
                   width: 140,
                   child: Column(
@@ -35,11 +47,12 @@ class TrendingMovies extends StatelessWidget {
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: NetworkImage(
-                              defaultUrl + trending[index]["poster_path"],
+                              defaultUrl + (trending[index]["poster_path"] != null ? trending[index]["poster_path"] : trending[index]["backdrop_path"]),
                             ),
                           ),
                         ),
                       ),
+                      SizedBox(height: 5,),
                       Container(
                         child: Text(trending[index]["title"] != null ? trending[index]["title"] : "loading",
                           style: GoogleFonts.breeSerif(),

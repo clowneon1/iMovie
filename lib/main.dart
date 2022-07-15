@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:imovie/Auth/Access.dart';
 import 'package:imovie/util/text.dart';
+import 'package:imovie/widgets/popular_tv_shows.dart';
 import 'package:imovie/widgets/top_rated.dart';
 import 'package:imovie/widgets/trending.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+
+import 'model/movie.dart';
 
 void main() => runApp(new IMovie());
 
@@ -50,19 +56,20 @@ class _HomeState extends State<Home> {
         showErrorLogs: true,
       ),
     );
+
     //getting dictionary / Map of trending movies i.e. key value pair
     Map trendingResult = await tmdbWithCustomLogs.v3.trending.getTrending();
     //getting dictionary / Map of top rated movies i.e. key value pair
     Map topRatedResult = await tmdbWithCustomLogs.v3.movies.getTopRated();
     //getting dictionary / Map of popular tv shows i.e. key value pair
     Map tvResult = await tmdbWithCustomLogs.v3.tv.getPopular();
-    print(trendingResult);
+
     setState(() {
       trendingMovies = trendingResult["results"];
       topRatedMovies = topRatedResult["results"];
       tv = tvResult["results"];
     });
-    print(trendingMovies);
+    //print(trendingMovies[0].overview);
   }
 
   @override
@@ -76,6 +83,7 @@ class _HomeState extends State<Home> {
       ),
       body: ListView(
         children: [
+          PopularTvShows(shows: tv),
           TrendingMovies(trending: trendingMovies),
           TopRated(topRated: topRatedMovies),
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../description.dart';
 import '../util/text.dart';
 
 class TopRated extends StatelessWidget {
@@ -10,14 +11,14 @@ class TopRated extends StatelessWidget {
   
   final defaultUrl = "https://image.tmdb.org/t/p/w500";
 
-  @override
+  // @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ModifiedText(text: "Top Ratewd Movies", color: Colors.white, size: 26),
+          ModifiedText(text: "Top Rated Movies", color: Colors.white, size: 26),
           SizedBox(height: 10,),
           //List view container
           Container(
@@ -27,7 +28,17 @@ class TopRated extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemBuilder: ((context, index) {
                 return InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                    builder: ((context) =>
+                      Description(name: topRated[index]["title"] != null ? topRated[index]["title"] : "Not Loading", 
+                      description: topRated[index]["overview"] != null ? topRated[index]["overview"] : "Not Loading", 
+                      bannerUrl: topRated[index]["backdrop_path"] != null ? topRated[index]["backdrop_path"] : "default", 
+                      posterUrl: topRated[index]["poster_path"] != null ? topRated[index]["poster_path"] : "default", 
+                      vote: topRated[index]["vote_average"] != null ? topRated[index]["vote_average"] : 0.0, 
+                      launchOn: topRated[index]["release_date"] != null ? topRated[index]["release_date"] : "N/A")
+                    )));
+                  },
                   child: Container(
                     width: 140,
                     child: Column(
@@ -42,6 +53,7 @@ class TopRated extends StatelessWidget {
                             ),
                           ),
                         ),
+                        SizedBox(height: 5,),
                         Container(
                           child: Text(topRated[index]["title"] != null ? topRated[index]["title"] : "loading",
                             style: GoogleFonts.breeSerif(),
